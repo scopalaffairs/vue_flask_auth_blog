@@ -1,0 +1,13 @@
+@tailwind preflight;
+@tailwind components;
+
+@import './variables';
+
+@import '../../assets/scss/components/button.scss';
+@import '../../assets/scss/components/container.scss';
+@import '../../assets/scss/components/accordion.scss';
+@import '../../assets/scss/components/forms.scss';
+@import '../../assets/scss/components/utils.scss';
+
+@tailwind utilities;
+@import '../../assets/scss/components/fonts.scss';

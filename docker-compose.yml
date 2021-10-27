@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+    frontend:
+        image: frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        container_name: "frontend_scopal_boards"
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./frontend/app:/usr/src/app
+            - /usr/src/app/node_modules
+        stdin_open: true
+        tty: true
+        environment:
+            - NODE_ENV=development
+            - CHOKIDAR_USEPOLLING=true
+    backend:
+        restart: always
+        image: backend
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        container_name: "backend_scopal_boards"
+        command: bash -c "python3 run.py"
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./backend/app:/app
+        links:
+            - db
+    db:
+        restart: always
+        image: postgres
+        volumes:
+            - ./postgresql/data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: pguser
+            POSTGRES_PASSWORD: pguser
+            POSTGRES_DB: pgdb
+    redis:
+        image: redis
+    nginx:
+        restart: always
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - frontend
+volumes:
+  node_modules:
+networks:
+    default:
+        name: scopal_boards
